@@ -5,7 +5,9 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: npm ci && npm run build
+    # Render sets NODE_ENV=production, which would skip devDependencies
+    # (TypeScript and @types/*) needed to compile; include them for the build.
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /health
     autoDeploy: true
