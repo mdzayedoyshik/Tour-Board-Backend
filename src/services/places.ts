@@ -184,7 +184,18 @@ export class PlacesClient {
 
   private async checked(res: Response): Promise<unknown> {
     if (res.status === 429) throw new HttpError(429, 'rate-limited');
-    if (!res.ok) throw new HttpError(502, 'places-upstream-error');
-    return res.json();
+    if (!res.ok) {
+      // Keep Google's reason (e.g. API_KEY_HTTP_REFERRER_BLOCKED) for the
+      // server log; clients only see a generic code.
+      const body = await res.text().catch(() => '');
+      const reason = /"reason":\s*"([A-Z_]+)"/.exec(body)?.[1] ?? /"message":\s*"([^"]+)"/.exec(body)?.[1];
+      throw new HttpError(502, 'places-upstream-error', `Google ${res.status}: ${reason ?? 'unknown'}`);
+    }
+    const json = (await res.json()) as { status?: string; error_message?: string };
+    // The Geocoding API reports key problems with HTTP 200 + status.
+    if (json.status === 'REQUEST_DENIED') {
+      throw new HttpError(502, 'places-upstream-error', `Google REQUEST_DENIED: ${json.error_message ?? ''}`);
+    }
+    return json;
   }
 }

@@ -180,3 +180,31 @@ describe('HTTP', () => {
     expect(last).toBe(429);
   });
 });
+
+describe('upstream error reporting', () => {
+  it('keeps Google error reasons for the logs', async () => {
+    const client = new PlacesClient(
+      'key',
+      undefined,
+      (async () =>
+        jsonResponse(
+          { error: { code: 403, details: [{ reason: 'API_KEY_HTTP_REFERRER_BLOCKED' }] } },
+          403,
+        )) as unknown as typeof fetch,
+    );
+    await expect(client.autocomplete({ query: 'abc' })).rejects.toMatchObject({
+      status: 502,
+      message: 'Google 403: API_KEY_HTTP_REFERRER_BLOCKED',
+    });
+  });
+
+  it('treats Geocoding REQUEST_DENIED as an upstream error', async () => {
+    const client = new PlacesClient(
+      'key',
+      undefined,
+      (async () =>
+        jsonResponse({ status: 'REQUEST_DENIED', error_message: 'API keys with referer restrictions cannot be used' })) as unknown as typeof fetch,
+    );
+    await expect(client.reverseGeocode(1, 2)).rejects.toMatchObject({ status: 502 });
+  });
+});
