@@ -1,0 +1,24 @@
+# Render Blueprint (https://render.com/docs/blueprint-spec).
+services:
+  - type: web
+    name: tour-board-backend
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: LOG_LEVEL
+        value: info
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false
+      - key: GOOGLE_MAPS_SERVER_KEY
+        sync: false
+      - key: CRON_SECRET
+        sync: false

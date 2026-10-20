@@ -1,0 +1,30 @@
+name: Daily cleanup
+
+# Render's free web services sleep and Render cron jobs are paid, so a free
+# scheduled GitHub Action triggers the retention job instead (and wakes the
+# server). Requires the CRON_SECRET repository secret to match Render's.
+on:
+  schedule:
+    - cron: '30 21 * * *' # 03:30 Asia/Dhaka
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    env:
+      BACKEND_URL: ${{ vars.BACKEND_URL || 'https://tour-board-backend.onrender.com' }}
+    steps:
+      - name: Wake the server
+        run: |
+          for i in 1 2 3 4 5 6; do
+            curl -fsS --max-time 60 "$BACKEND_URL/health" && exit 0
+            sleep 20
+          done
+          exit 1
+      - name: Run cleanup
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -fsS --max-time 300 -X POST \
+            -H "X-Cron-Secret: $CRON_SECRET" \
+            "$BACKEND_URL/internal/jobs/cleanup"
