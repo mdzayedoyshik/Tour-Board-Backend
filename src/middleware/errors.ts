@@ -17,6 +17,8 @@ export class HttpError extends Error {
 export function errorHandler(logger: Logger) {
   return (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof HttpError) {
+      // Upstream/server failures are worth seeing in the logs.
+      if (err.status >= 500) logger.warn({ code: err.code, detail: err.message }, 'request failed');
       res.status(err.status).json({ error: err.code });
       return;
     }
