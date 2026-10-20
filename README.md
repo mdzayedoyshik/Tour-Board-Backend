@@ -62,7 +62,7 @@ The app writes `users/{uid}/devices/{deviceId}` (`token`, `platform`,
    API key*, restricted to **Places API (New)** and **Geocoding API** only.
 3. **Cron secret**: `openssl rand -hex 32`.
 4. Render → *New → Blueprint* (uses `render.yaml`) or *New → Web Service*
-   from this repo with build `npm ci && npm run build` and start
+   from this repo with build `npm ci --include=dev && npm run build` and start
    `npm start`. In *Environment* set:
    - `FIREBASE_SERVICE_ACCOUNT`: paste the JSON (or base64 of it)
    - `GOOGLE_MAPS_SERVER_KEY`
