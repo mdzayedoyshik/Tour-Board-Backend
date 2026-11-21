@@ -1,6 +1,6 @@
 # Tour Board Backend
 
-A small Node.js + TypeScript API for the [Tour Board](https://github.com/xX0ZAK0Xx/Tour-Board)
+A small Node.js + TypeScript API for the [Tour Board](https://github.com/mdzayedoyshik/Tour-Board)
 app. It does the few jobs a phone can't do safely on its own:
 
 - **Notifications**: verifies that a reported event really happened in
@@ -86,3 +86,11 @@ npm run dev               # http://localhost:8080
 npm run typecheck && npm test
 npm run test:emulator     # needs Java 17+ and firebase-tools
 ```
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE) © Md. Zayed Oyshik

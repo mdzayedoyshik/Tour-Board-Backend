@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xX0ZAK0Xx/Tour-Board-Backend.git"
+    "url": "git+https://github.com/mdzayedoyshik/Tour-Board-Backend.git"
   },
   "bugs": {
-    "url": "https://github.com/xX0ZAK0Xx/Tour-Board-Backend/issues"
+    "url": "https://github.com/mdzayedoyshik/Tour-Board-Backend/issues"
   },
-  "homepage": "https://github.com/xX0ZAK0Xx/Tour-Board-Backend#readme",
+  "homepage": "https://github.com/mdzayedoyshik/Tour-Board-Backend#readme",
   "private": true,
   "type": "module",
   "engines": {
